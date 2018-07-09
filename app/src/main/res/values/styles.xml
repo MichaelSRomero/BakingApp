@@ -17,4 +17,9 @@
         <item name="android:textSize">@dimen/text_16sp</item>
     </style>
 
+    <style name="RecipeStepItemText">
+        <item name="android:textSize">@dimen/text_16sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>

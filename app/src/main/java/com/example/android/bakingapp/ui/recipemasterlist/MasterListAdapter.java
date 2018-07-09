@@ -1,7 +1,10 @@
-package com.example.android.bakingapp.recipemasterlist;
+package com.example.android.bakingapp.ui.recipemasterlist;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +13,14 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
+import com.example.android.bakingapp.ui.recipedetail.DetailsActivity;
+import com.example.android.bakingapp.utils.DrawableResUtils;
 
 import java.util.List;
 
 public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.MyViewHolder> {
+
+    private static final String LOG = MasterListAdapter.class.getSimpleName();
 
     private Context mContext;
     private List<Recipe> mRecipeList;
@@ -22,12 +29,14 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.My
 
         public TextView recipeName, servings;
         public ImageView recipeImage;
+        public CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.iv_recipe);
             recipeName = itemView.findViewById(R.id.tv_recipe_name);
             servings = itemView.findViewById(R.id.tv_recipe_servings);
+            cardView = itemView.findViewById(R.id.cv_recipe_item);
         }
     }
 
@@ -47,12 +56,22 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.My
     @Override
     public void onBindViewHolder( MyViewHolder holder, int position) {
 
-        Recipe currentRecipe = mRecipeList.get(position);
+        final Recipe currentRecipe = mRecipeList.get(position);
         int recipeId = currentRecipe.getId();
 
         holder.recipeName.setText(currentRecipe.getName());
         holder.servings.setText(String.valueOf(currentRecipe.getServings()));
-        holder.recipeImage.setImageResource(getDrawableResId(recipeId));
+        holder.recipeImage.setImageResource(DrawableResUtils.getDrawableResId(recipeId));
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.v(LOG, "Recipe Step Size = " + currentRecipe.getSteps().size());
+                Intent intent = new Intent(view.getContext(), DetailsActivity.class);
+                intent.putExtra(Recipe.RECIPE_KEY, currentRecipe);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -68,19 +87,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.My
     public void addData(List<Recipe> recipes) {
         mRecipeList.addAll(recipes);
         notifyDataSetChanged();
-    }
-
-    private int getDrawableResId(int recipeId) {
-        switch (recipeId) {
-            case 1:
-                return R.drawable.nutella_pie;
-            case 2:
-                return R.drawable.brownies;
-            case 3:
-                return R.drawable.yellow_cake;
-            default:
-                return R.drawable.cheesecake;
-        }
     }
 
 }

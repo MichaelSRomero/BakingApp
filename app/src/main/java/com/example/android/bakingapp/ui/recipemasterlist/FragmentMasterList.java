@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.recipemasterlist;
+package com.example.android.bakingapp.ui.recipemasterlist;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,15 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.ViewModel.RecipeViewModel;
+import com.example.android.bakingapp.viewmodel.RecipeViewModel;
 import com.example.android.bakingapp.model.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MasterListFragment extends Fragment {
+public class FragmentMasterList extends Fragment {
 
-    public MasterListFragment() {}
+    public FragmentMasterList() {}
 
     private List<Recipe> mRecipeList;
     private MasterListAdapter mAdapter;
