@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +49,8 @@ public class FragmentDetails extends Fragment {
             mRecipe = bundle.getParcelable(Recipe.RECIPE_KEY);
             mStepList = mRecipe.getSteps();
             mIngredientList = mRecipe.getIngredients();
-            Log.v(LOG, "Recipe Ingredients = " + mIngredientList.size());
         }
 
-        //mStepList = new ArrayList<>();
         setUpViews();
         mAdapter = new DetailsAdapter(getActivity(), mStepList);
 

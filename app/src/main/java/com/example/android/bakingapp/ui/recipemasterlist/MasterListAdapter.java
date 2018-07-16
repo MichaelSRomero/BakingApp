@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +65,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.My
             @Override
             public void onClick(View view) {
 
-                Log.v(LOG, "Recipe Step Size = " + currentRecipe.getSteps().size());
                 Intent intent = new Intent(view.getContext(), DetailsActivity.class);
                 intent.putExtra(Recipe.RECIPE_KEY, currentRecipe);
                 view.getContext().startActivity(intent);
