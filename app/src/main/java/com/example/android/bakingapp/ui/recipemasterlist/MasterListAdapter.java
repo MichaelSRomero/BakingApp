@@ -1,8 +1,6 @@
 package com.example.android.bakingapp.ui.recipemasterlist;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
-import com.example.android.bakingapp.ui.recipedetail.DetailsActivity;
 import com.example.android.bakingapp.utils.DrawableResUtils;
 
 import java.util.List;
@@ -21,21 +18,36 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.My
 
     private static final String LOG = MasterListAdapter.class.getSimpleName();
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
     private Context mContext;
     private List<Recipe> mRecipeList;
+    public OnItemClickListener onItemClickListener;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         public TextView recipeName, servings;
         public ImageView recipeImage;
-        public CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.iv_recipe);
             recipeName = itemView.findViewById(R.id.tv_recipe_name);
             servings = itemView.findViewById(R.id.tv_recipe_servings);
-            cardView = itemView.findViewById(R.id.cv_recipe_item);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(getAdapterPosition());
         }
     }
 
@@ -61,15 +73,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.My
         holder.recipeName.setText(currentRecipe.getName());
         holder.servings.setText(String.valueOf(currentRecipe.getServings()));
         holder.recipeImage.setImageResource(DrawableResUtils.getDrawableResId(recipeId));
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(view.getContext(), DetailsActivity.class);
-                intent.putExtra(Recipe.RECIPE_KEY, currentRecipe);
-                view.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override

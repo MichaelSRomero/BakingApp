@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,11 @@ public class FragmentDetails extends Fragment {
     }
 
     private void setUpViews() {
+        if (mRecipe == null) {
+            Log.v(LOG, "RECIPE XXX2 = " + mRecipe);
+        } else {
+            Log.v(LOG, "RECIPE XXX = " + mRecipe);
+        }
         int recipeId = mRecipe.getId();
 
         getActivity().setTitle(mRecipe.getName());
@@ -79,4 +85,5 @@ public class FragmentDetails extends Fragment {
 
         }
     }
+    //TODO: Fix Up button "mRecipe.getId is Null"
 }

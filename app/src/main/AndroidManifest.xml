@@ -25,7 +25,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.recipemasterlist.MainActivity" />
         </activity>
-        <activity android:name=".ui.recipesteps.RecipeStepsActivity"></activity>
+        <activity android:name=".ui.recipesteps.RecipeStepsActivity"
+            android:parentActivityName=".ui.recipedetail.DetailsActivity"
+            android:configChanges="orientation|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.recipedetail.DetailsActivity" />
+        </activity>
     </application>
 
 </manifest>

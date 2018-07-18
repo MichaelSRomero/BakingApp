@@ -12,6 +12,7 @@ import java.util.List;
 public class RecipeViewModel extends ViewModel {
 
     private MutableLiveData<List<Recipe>> recipeList;
+    private final MutableLiveData<Recipe> recipe = new MutableLiveData<>();
 
     public LiveData<List<Recipe>> getRecipeLists() {
 
@@ -19,6 +20,14 @@ public class RecipeViewModel extends ViewModel {
             recipeList = RetrofitClient.callRecipe();
         }
         return recipeList;
+    }
+
+    public LiveData<Recipe> getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe.setValue(recipe);
     }
 
 }
