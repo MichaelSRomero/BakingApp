@@ -1,37 +1,48 @@
 package com.example.android.bakingapp.ui.recipedetail;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Step;
-import com.example.android.bakingapp.ui.recipesteps.RecipeStepsActivity;
 
 import java.util.List;
 
 public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MyViewHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
     private Context mContext;
     private List<Step> mStepList;
+    public OnItemClickListener onItemClickListener;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
+    public class MyViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private TextView recipeStepId, stepShortDescription;
-        private LinearLayout linearLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             recipeStepId = itemView.findViewById(R.id.tv_steps_id);
             stepShortDescription = itemView.findViewById(R.id.tv_steps_short_desrciption);
-            linearLayout = itemView.findViewById(R.id.linear_layout_steps_item);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(getAdapterPosition());
         }
     }
 
@@ -57,16 +68,6 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MyViewHo
 
         holder.recipeStepId.setText(String.valueOf(currentStep.getId()));
         holder.stepShortDescription.setText(currentStep.getShortDescription());
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(view.getContext(), RecipeStepsActivity.class);
-                intent.putExtra(Step.STEP_KEY, currentStep);
-                view.getContext().startActivity(intent);
-            }
-        });
-
     }
 
     @Override

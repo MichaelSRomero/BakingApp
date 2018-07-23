@@ -1,10 +1,10 @@
 package com.example.android.bakingapp.ui.recipedetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Ingredient;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
+import com.example.android.bakingapp.ui.recipesteps.RecipeStepsActivity;
 import com.example.android.bakingapp.utils.DrawableResUtils;
 
 import java.util.List;
@@ -36,8 +37,8 @@ public class FragmentDetails extends Fragment {
     private TextView mTextViewIngredients;
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_details_list, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.details_recycler_view);
 
@@ -59,15 +60,22 @@ public class FragmentDetails extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
+        mAdapter.setOnItemClickListener(new DetailsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Step currentStep = mStepList.get(position);
+                Intent intent = new Intent(getContext(), RecipeStepsActivity.class);
+                intent.putExtra(Step.STEP_KEY, currentStep);
+                intent.putExtra(Recipe.RECIPE_KEY, mRecipe);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
     private void setUpViews() {
-        if (mRecipe == null) {
-            Log.v(LOG, "RECIPE XXX2 = " + mRecipe);
-        } else {
-            Log.v(LOG, "RECIPE XXX = " + mRecipe);
-        }
+
         int recipeId = mRecipe.getId();
 
         getActivity().setTitle(mRecipe.getName());
@@ -85,5 +93,4 @@ public class FragmentDetails extends Fragment {
 
         }
     }
-    //TODO: Fix Up button "mRecipe.getId is Null"
 }

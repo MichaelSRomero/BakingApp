@@ -20,6 +20,7 @@
         </activity>
         <activity
             android:name=".ui.recipedetail.DetailsActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".ui.recipemasterlist.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

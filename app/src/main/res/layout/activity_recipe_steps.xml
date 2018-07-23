@@ -26,5 +26,13 @@
             android:layout_height="wrap_content">
         </FrameLayout>
 
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:onClick="nextStep"
+            android:text="Next"/>
+
     </LinearLayout>
 </ScrollView>

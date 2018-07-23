@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Step;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -29,9 +30,13 @@ import com.google.android.exoplayer2.util.Util;
 public class FragmentExoPlayer extends Fragment {
 
     private static final String LOG = FragmentExoPlayer.class.getSimpleName();
+    private final String SELECTED_POSITION = "selected_position";
+
+    private Uri mVideoUri;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Step mStep;
+    private long mPlayerPosition;
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
@@ -41,10 +46,14 @@ public class FragmentExoPlayer extends Fragment {
 
         if (savedInstanceState != null) {
             mStep = savedInstanceState.getParcelable(Step.STEP_KEY);
+            // Receive the saved position where the player left off at,
+            // if there was none, then we set the variable to its default value "C.TIME_UNSET"
+            mPlayerPosition = savedInstanceState.getLong(SELECTED_POSITION, C.TIME_UNSET);
         }
 
         if (mStep != null) {
-            initializePlayer(Uri.parse(mStep.getVideoURL()));
+            mVideoUri = Uri.parse(mStep.getVideoURL());
+            initializePlayer(mVideoUri);
         }
 
         return rootView;
@@ -67,6 +76,11 @@ public class FragmentExoPlayer extends Fragment {
             String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            // If the player position was set,
+            // then we resume to where the video left off at
+            if (mPlayerPosition != C.TIME_UNSET) {
+                mExoPlayer.seekTo(mPlayerPosition);
+            }
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
         }
@@ -81,19 +95,43 @@ public class FragmentExoPlayer extends Fragment {
         mExoPlayer = null;
     }
 
+    /*
+     * Set the current step from within {@RecipeStepsActivity} before beginning a fragment
+     * transaction
+     */
     public void setStep(Step currentStep) {
         mStep = currentStep;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mVideoUri != null) {
+            initializePlayer(mVideoUri);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mExoPlayer != null) {
+            mPlayerPosition = mExoPlayer.getCurrentPosition();
+            releasePlayer();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        releasePlayer();
+        if (mExoPlayer != null) {
+            releasePlayer();
+        }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(Step.STEP_KEY, mStep);
+        outState.putLong(SELECTED_POSITION, mPlayerPosition);
         super.onSaveInstanceState(outState);
     }
 }
