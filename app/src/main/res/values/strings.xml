@@ -3,4 +3,5 @@
     <string name="recipe_item_servings_label">Servings:</string>
     <string name="ingredients_label">Ingredients</string>
     <string name="instructions_label">Instructions</string>
+    <string name="next_button_label">Next</string>
 </resources>

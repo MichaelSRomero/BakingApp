@@ -13,6 +13,7 @@ import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.ui.recipedetail.DetailsActivity;
 import com.example.android.bakingapp.viewmodel.RecipeViewModel;
+import com.example.android.bakingapp.widget.WidgetUpdateService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
                 Recipe currentRecipe = mRecipeList.get(position);
                 Intent intent = new Intent(getBaseContext(), DetailsActivity.class);
                 intent.putExtra(Recipe.RECIPE_KEY, currentRecipe);
+
+                WidgetUpdateService.startActionUpdateWidget(getBaseContext(), currentRecipe);
                 startActivity(intent);
             }
         });

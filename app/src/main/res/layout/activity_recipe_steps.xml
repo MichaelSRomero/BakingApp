@@ -16,7 +16,7 @@
         <FrameLayout
             android:id="@+id/exo_player_container"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="@dimen/exo_player_container_height">
         </FrameLayout>
 
         <FrameLayout
@@ -28,11 +28,12 @@
 
         <Button
             android:id="@+id/next_button"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/next_button_width"
+            android:layout_height="@dimen/next_button_height"
+            android:layout_marginTop="@dimen/margin_padding_16dp"
             android:layout_gravity="center_horizontal|bottom"
             android:onClick="nextStep"
-            android:text="Next"/>
+            android:text="@string/next_button_label"/>
 
     </LinearLayout>
 </ScrollView>
