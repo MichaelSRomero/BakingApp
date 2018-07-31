@@ -50,8 +50,9 @@ public class WidgetUpdateService extends IntentService {
         Intent intent = new Intent(context, RecipeWidgetProvider.class);
         intent.setAction(ACTION_UPDATE_WIDGET);
         intent.putExtra(Recipe.RECIPE_KEY, recipe);
-        Log.v(LOG, "TESTXX Starting Action = " + recipe.getName());
+//        Log.v(LOG, "TESTXX Starting Action = " + recipe.getName());
 
-        context.startService(intent);
+        //context.startService(intent);
+        context.sendBroadcast(intent);
     }
 }

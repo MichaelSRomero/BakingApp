@@ -31,12 +31,14 @@ public class FragmentExoPlayer extends Fragment {
 
     private static final String LOG = FragmentExoPlayer.class.getSimpleName();
     private final String SELECTED_POSITION = "selected_position";
+    private final String PLAY_WHEN_READY = "play_when_ready";
 
     private Uri mVideoUri;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Step mStep;
     private long mPlayerPosition;
+    private Boolean mPlayWhenReady = true;
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
@@ -49,6 +51,7 @@ public class FragmentExoPlayer extends Fragment {
             // Receive the saved position where the player left off at,
             // if there was none, then we set the variable to its default value "C.TIME_UNSET"
             mPlayerPosition = savedInstanceState.getLong(SELECTED_POSITION, C.TIME_UNSET);
+            mPlayWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
         }
 
         if (mStep != null) {
@@ -82,7 +85,7 @@ public class FragmentExoPlayer extends Fragment {
                 mExoPlayer.seekTo(mPlayerPosition);
             }
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(mPlayWhenReady);
         }
     }
 
@@ -104,34 +107,61 @@ public class FragmentExoPlayer extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            if (mVideoUri != null) {
+                initializePlayer(mVideoUri);
+            }
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        if (mVideoUri != null) {
-            initializePlayer(mVideoUri);
+        if (Util.SDK_INT <= 23 || mExoPlayer == null) {
+            if (mVideoUri != null) {
+                initializePlayer(mVideoUri);
+            }
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mExoPlayer != null) {
-            mPlayerPosition = mExoPlayer.getCurrentPosition();
-            releasePlayer();
+        if (Util.SDK_INT <= 23) {
+            if (mExoPlayer != null) {
+                mPlayerPosition = mExoPlayer.getCurrentPosition();
+                mPlayWhenReady = mExoPlayer.getPlayWhenReady();
+                releasePlayer();
+            }
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mExoPlayer != null) {
-            releasePlayer();
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            if (mExoPlayer != null) {
+                mPlayerPosition = mExoPlayer.getCurrentPosition();
+                releasePlayer();
+            }
         }
     }
+
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (mExoPlayer != null) {
+//            releasePlayer();
+//        }
+//    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(Step.STEP_KEY, mStep);
         outState.putLong(SELECTED_POSITION, mPlayerPosition);
+        outState.putBoolean(PLAY_WHEN_READY, mPlayWhenReady);
         super.onSaveInstanceState(outState);
     }
 }
