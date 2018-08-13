@@ -36,6 +36,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.recipedetail.DetailsActivity" />
         </activity>
+        <service android:name=".widget.BakingViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <service android:name=".widget.WidgetUpdateService" />
 

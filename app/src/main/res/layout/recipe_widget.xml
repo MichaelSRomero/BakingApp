@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_linear_layout"
-    android:layout_height="120dp"
-    android:layout_width="320dp"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    >
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/widget_textview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:background="@color/gray_200"
-        tools:text="@tools:sample/lorem/random"
+        android:id="@+id/widget_recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        tools:text="@string/app_name"
+        android:textSize="@dimen/text_size_20sp"
         />
+
+    <ListView
+        android:id="@+id/remote_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/empty_text"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!--<TextView-->
+        <!--android:id="@+id/widget_textview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="16sp"-->
+        <!--tools:text="@tools:sample/lorem/random"-->
+        <!--/>-->
 
 
 </LinearLayout>

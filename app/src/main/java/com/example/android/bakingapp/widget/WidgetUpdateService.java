@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
@@ -21,7 +20,6 @@ public class WidgetUpdateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.v(LOG, "TESTXX onHandleIntent = " + intent);
         if (intent != null) {
             final String action = intent.getAction();
 
@@ -33,7 +31,6 @@ public class WidgetUpdateService extends IntentService {
     }
 
     private void handleActionUpdateWidget(Recipe recipe) {
-        Log.v(LOG, "TESTXX handleActionUpdate = " + recipe);
         if (recipe != null) {
             WidgetSharedPref.saveRecipe(this, recipe);
         }
@@ -42,17 +39,15 @@ public class WidgetUpdateService extends IntentService {
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                 new ComponentName(this, RecipeWidgetProvider.class));
 
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_textview);
         RecipeWidgetProvider.updateMultipleWidgets(this, appWidgetManager, appWidgetIds);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.remote_list_view);
     }
 
     public static void startActionUpdateWidget(Context context, Recipe recipe) {
-        Intent intent = new Intent(context, RecipeWidgetProvider.class);
+        Intent intent = new Intent(context, WidgetUpdateService.class);
         intent.setAction(ACTION_UPDATE_WIDGET);
         intent.putExtra(Recipe.RECIPE_KEY, recipe);
-//        Log.v(LOG, "TESTXX Starting Action = " + recipe.getName());
 
-        //context.startService(intent);
-        context.sendBroadcast(intent);
+        context.startService(intent);
     }
 }

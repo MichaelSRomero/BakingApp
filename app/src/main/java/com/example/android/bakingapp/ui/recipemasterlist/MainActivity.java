@@ -1,9 +1,7 @@
 package com.example.android.bakingapp.ui.recipemasterlist;
 
-import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +13,7 @@ import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.ui.recipedetail.DetailsActivity;
 import com.example.android.bakingapp.viewmodel.RecipeViewModel;
-import com.example.android.bakingapp.widget.RecipeWidgetProvider;
+import com.example.android.bakingapp.widget.WidgetUpdateService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +44,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 Recipe currentRecipe = mRecipeList.get(position);
-                Intent intent = new Intent(getBaseContext(), DetailsActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                 intent.putExtra(Recipe.RECIPE_KEY, currentRecipe);
 
-                //WidgetUpdateService.startActionUpdateWidget(getBaseContext(), currentRecipe);
-                sendBroadcastIntent(currentRecipe);
+                WidgetUpdateService.startActionUpdateWidget(getBaseContext(), currentRecipe);
                 startActivity(intent);
             }
         });
@@ -64,16 +61,5 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.addData(recipes);
             }
         });
-    }
-
-    private void sendBroadcastIntent(Recipe recipe) {
-        Intent intent = new Intent(this, RecipeWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-
-        int[] ids = AppWidgetManager.getInstance(getApplication())
-                .getAppWidgetIds(new ComponentName(getApplication(), RecipeWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        intent.putExtra(Recipe.RECIPE_KEY, recipe);
-        sendBroadcast(intent);
     }
 }

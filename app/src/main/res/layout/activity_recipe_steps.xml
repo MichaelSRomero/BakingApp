@@ -8,6 +8,7 @@
     tools:context=".ui.recipesteps.RecipeStepsActivity">
 
     <LinearLayout
+        android:id="@+id/recipe_steps_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_padding_16dp"
