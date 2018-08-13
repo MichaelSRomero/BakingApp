@@ -39,6 +39,7 @@ public class FragmentExoPlayer extends Fragment {
     private Step mStep;
     private long mPlayerPosition;
     private Boolean mPlayWhenReady = true;
+    private Boolean mReleasePlayer = false;
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
@@ -129,10 +130,10 @@ public class FragmentExoPlayer extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        mPlayWhenReady = mExoPlayer.getPlayWhenReady();
         if (Util.SDK_INT <= 23) {
             if (mExoPlayer != null) {
                 mPlayerPosition = mExoPlayer.getCurrentPosition();
-                mPlayWhenReady = mExoPlayer.getPlayWhenReady();
                 releasePlayer();
             }
         }
