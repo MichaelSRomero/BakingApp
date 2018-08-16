@@ -39,7 +39,6 @@ public class FragmentExoPlayer extends Fragment {
     private Step mStep;
     private long mPlayerPosition;
     private Boolean mPlayWhenReady = true;
-    private Boolean mReleasePlayer = false;
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
@@ -149,14 +148,6 @@ public class FragmentExoPlayer extends Fragment {
             }
         }
     }
-
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        if (mExoPlayer != null) {
-//            releasePlayer();
-//        }
-//    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
